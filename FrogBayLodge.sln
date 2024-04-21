@@ -5,6 +5,13 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrogBayLodge", "FrogBayLodge\FrogBayLodge.csproj", "{E9F6B51E-4172-4908-8107-750327972626}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lecture Info", "Lecture Info", "{9587455C-5D85-45C1-9B8E-BECE83864BFE}"
+	ProjectSection(SolutionItems) = preProject
+		FrogBayLodge\auth_configure.jpg = FrogBayLodge\auth_configure.jpg
+		Readme.md = Readme.md
+		FrogBayLodge\scaffoled_identity_context.png = FrogBayLodge\scaffoled_identity_context.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

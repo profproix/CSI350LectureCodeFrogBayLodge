@@ -34,7 +34,6 @@
                 @Html.DisplayNameFor(model => model.BasePrice)
             </th>
             <th>
-                <img src=@Html.DisplayNameFor(model => model.ImageUrl) class="detailImage" />
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
             <th></th>
@@ -67,11 +66,18 @@
             <td>
                     <img style="max-width: 300px;" src=@Html.DisplayFor(modelItem => item.ImageUrl) class="room image" />
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                @if (User.IsInRole("Admin"))
+                {
+      
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                       
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                   
+                }
+                 </td>
+           
         </tr>
 }
     </tbody>
