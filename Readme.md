@@ -1,82 +1,69 @@
-# Security Authentication and Authorization 
+# Views
 ## Topics
-- Identity Framework 
-- Authentication 
-- Authorization: Creating Roles & Restricting access
-- How to properly scaffold 
+- Views Review
+- Razor Pages
+- Partials
+- View Components 
+- Tag helpers
 
-- Stretch Goal: Updating user info
+### Razor View Engine
+- Markup that generates HTML and server-side code
 
+### View Components 
+- View Components are like partials with more logic. 
+1. Create a folder called Components.
+2. Create a class for your component; in this demo we are creating a dynamic drop-down menu so our component is called `SpaMenuViewComponent.cs`
+3. Have SpaMenuViewComponent inherit from ViewComponent `  public class SpaMenuViewComponent : ViewComponent`
+4. We will need access to our database so bring context into the class. 
+```
+  private readonly ApplicationDbContext _context;
 
-## Adding more functionality 
-We are adding <FrameworkReference Include="Microsoft.AspNetCore.app" /> to the project file. This will give us a bit more functionality and help resolve some scaffolding errors we see with the Identity framework. 
-
-## Scaffold Identity 
-- First, we Installed Microsoft.AspNetCore.Identity.EntityFrameworkCore   
-- AppicationdbContext needs to be updated to inherit from Identity before we Scaffoled `ApplicationDbContext : IdentityDbContext<IdentityUser>`   
-- Create a new scaffold item and walk through the steps for scaffolding identity. Select ApplicationDbcontext as it's context to avoid errors.    
-	- Dealing with errors     
-	    - You may or may not need to remove the following. As of the last time I scaffolded using ApplicationDbContext (with IdentityDbcontext), these issues have yet to come up.   
-		- Identity may add an extra ApplicationDBContext! If there is a Data file in Areas -> Identity, remove the new ApplicationDbContext we will be using the one we built.   
-		- Check applsetting.json. You may also see an extra connection string created by Identity; remove it as well.   
-### Further Configuration
-- Add  base.OnModelCreating(modelBuilder); to on Model creating in ApplicationDbContext   
-- Add login partial to the nav in Layout   
-- Add the Middlewear app.UseAuthentication(); before app.UseAuthorization(); to Program.cs. Order is essential here. A user should be Authenticated before they are Authorized to do anything.   
-- Identity uses Razorpages, add builder.Services.AddRazorPages(); to the Program.cs as well.   
-- Down above the MapControllerRoute add app.MapRazorPages(); this will set up our auth routes.   
-- Add a new migration and update the database    
-
-## Adding Roles
-- Note: There are better practices for doing this, but I thought this solution by tutorials (see citation) would be a bit more accessible.   
-- Add `.AddRoles<IdentityRole>()` to the following line in Programs.cs 
- It should look like this: builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();   
-
-- Seed Roles and an Admin User by adding the following 
- ```
-using(var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Admin", "Customer", "RewardsMember" };
-    foreach(var role in roles)
-    {
-        if(!await roleManager.RoleExistsAsync(role))
+        public SpaMenuViewComponent(ApplicationDbContext context)
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            _context = context;
         }
-    }
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    var roles = new[] { "Admin", "Customer", "RewardsMember" };
-    string email = "admin@gmail.com";
-    string password = "Aa123456!";
-    if(await userManager.FindByEmailAsync(email) == null)
-    {
-        var user = new IdentityUser();
-        user.UserName = email;
-        user.Email = email;
-        user.EmailConfirmed = true;
-        await userManager.CreateAsync(user,password);
-        await userManager.AddToRoleAsync(user, "Admin");
-    }
-} 
+```
+5. Since we need access to the database to grab our spa package names, create an async task <IViewComponentResult> called InvokeAsync(). Use context to access the Spa packages and pass them to the view component. 
+```
+  public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var spa = await _context.Spa.ToListAsync();
+            return View(spa);
+        }
 ```
 
-- We will need to first restrict our actions. Add `Authorize(Roles = "Admin")]` above the Get Create, Edit and Delete actions. 
-- Lastly we need to remove the Create, Edit and Delete buttons from our View. In the Index View Nest the elements we'd like to remove in 
+6. In the shared folder, create a components folder. Within that folder, create a SpaMenu folder. Name the field Default.cshtml and add your markdown and styling.
 ```
-@if (User.IsInRole("Admin"))
-   {
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle role="button" data-bs-toggle="dropdown">Spa Packages</a>
+    <ul class="dropdown-menu">
+        @foreach(var spaPackage in Model)
+        {
+            <li> <a asp-controller="Spa" asp-action="Details" asp-route-id="@spaPackage.Id" class="text-decoration-none text-reset">@spaPackage.Package</a> </li>
+        }
+    </ul>
+</li>
 
-}	
 ```
 
-### Sources
-.net 8.0 scaffolding error solution 
-Patel, B. (2023, November). .NET Core MVC - The Complete Guide 2023 [E-commerce] [.NET8]: Identity in .NET core. https://www.udemy.com/. Retrieved April 21, 2024, from https://www.udemy.com/course/complete-aspnet-core-21-course/?couponCode=KEEPLEARNING
-
-Other references 
-tutorialsEU - C#. (2023, February 23). ASP.NET User Roles - Create and Assign Roles for AUTHORIZATION! [Video]. YouTube. https://www.youtube.com/watch?v=Y6DCP-yH-9Q
+### Custom Helper Tags
+- We will create a custom helper tag that will create a <a> for a phone number
+1. Create a folder called Helpers 
+2. Create a class for your tag called `CustomContactTagHelper.cs`
+3. Have CustomeContactTagHelper inherit from TagHelper `public class CustomContactTagHelper : TagHelper`
+4. Create an attribute PhoneNumber. ` public string PhoneNumber { get; set; }`
+5. Process is a TagHelper method allowing us to create our TagHelper. override the method with ` public override void Process(TagHelperContext context, TagHelperOutput output)`
+6. Within the Process method, use output.TagName is used to define the HTML tag we are creating; output.Attributes.SetAttribut is used to set its href to the PhoneNumber and output.Content.SetContent  is used to set the displayed text to PhoneNumber
+```
+            output.TagName = "a";
+            output.Attributes.SetAttribute("href", "tel: +" + PhoneNumber);
+            output.Content.SetContent(PhoneNumber);
+        
+```
+7. _ViewImports.cshtml is where we import our existing helper tags. To import our custom tag, add `@addTagHelper *, FrogBayLodge` to the file. 
+8. To use the helper in a view, we can invoke the helper using the Tags name; our Tag is CustomContactTagHelper, so its tag is <custom-contact>. To set the PhoneNumber attribute, we can add an attribute to our helper called 'phone-number'
+```
+    <div class="container">
+            Phone: <custom-contact phone-number="000-111-2222"></custom-contact>
+        </div>
+```
