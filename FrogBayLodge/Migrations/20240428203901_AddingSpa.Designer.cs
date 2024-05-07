@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FrogBayLodge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240421175038_AdIdentit")]
-    partial class AdIdentit
+    [Migration("20240428203901_AddingSpa")]
+    partial class AddingSpa
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,9 +36,12 @@ namespace FrogBayLodge.Migrations
                     b.Property<double>("BasePrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("Beds")
+                    b.Property<string>("BedType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Beds")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("Fireplace")
                         .HasColumnType("bit");
@@ -69,7 +72,8 @@ namespace FrogBayLodge.Migrations
                         {
                             Id = 1,
                             BasePrice = 300.0,
-                            Beds = "1 King 2 Queens 1 Pullout",
+                            BedType = "1 King 2 Queens 1 Pullout",
+                            Beds = 4,
                             Fireplace = true,
                             ImageUrl = "https://images.unsplash.com/photo-1445991842772-097fea258e7b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                             Kitchenette = true,
@@ -81,7 +85,8 @@ namespace FrogBayLodge.Migrations
                         {
                             Id = 2,
                             BasePrice = 100.0,
-                            Beds = "2 Queens",
+                            BedType = "2 Queens",
+                            Beds = 2,
                             Fireplace = false,
                             ImageUrl = "https://images.unsplash.com/photo-1445991842772-097fea258e7b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                             Kitchenette = false,
@@ -93,7 +98,8 @@ namespace FrogBayLodge.Migrations
                         {
                             Id = 3,
                             BasePrice = 120.0,
-                            Beds = "2 Queens",
+                            BedType = "2 Queens",
+                            Beds = 2,
                             Fireplace = false,
                             ImageUrl = "https://images.unsplash.com/photo-1445991842772-097fea258e7b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                             Kitchenette = true,
@@ -105,13 +111,68 @@ namespace FrogBayLodge.Migrations
                         {
                             Id = 4,
                             BasePrice = 180.0,
-                            Beds = "1 King",
+                            BedType = "1 King",
+                            Beds = 1,
                             Fireplace = true,
                             ImageUrl = "https://images.unsplash.com/photo-1445991842772-097fea258e7b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                             Kitchenette = true,
                             MaximumOccupancy = 2,
                             Name = "Frog 103",
                             View = false
+                        });
+                });
+
+            modelBuilder.Entity("FrogBayLodge.Models.Spa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Package")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Spa");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Experience the ultimate relaxation with a Swedish massage, known for its gentle yet effective techniques that soothe muscles and promote circulation. Enjoy a blissful escape from stress and tension as skilled hands knead away knots, leaving you feeling rejuvenated and refreshed.",
+                            Package = "Swedish Massage",
+                            Price = 150.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Dive deep into muscle tension and knots with a deep tissue massage, designed to target chronic pain and tightness.Through firm pressure and slow strokes, this treatment reaches the deeper layers of muscles, releasing tension and restoring mobility for a renewed sense of well - being.",
+                            Package = "Deep Tissue Massage",
+                            Price = 180.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = " Reveal your skin's natural radiance with the Diamond Glow facial, a luxurious treatment that exfoliates, extracts, and infuses the skin with nourishing serums. Using diamond-tipped technology, this non-invasive procedure gently buffs away dead skin cells, leaving your complexion smoother, brighter, and more youthful-looking.",
+                            Package = "Diamond Glow Facial",
+                            Price = 130.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Renew your skin with the transformative Frog Peel facial, featuring a potent blend of exfoliating acids to rejuvenate and clarify the complexion. This advanced peel helps to diminish fine lines, acne scars, and hyperpigmentation, revealing smoother, more even-toned skin with a healthy glow.",
+                            Package = "Frog Peel Facial",
+                            Price = 140.0
                         });
                 });
 

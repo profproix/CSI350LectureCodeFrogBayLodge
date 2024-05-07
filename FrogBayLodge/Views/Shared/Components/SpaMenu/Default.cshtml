@@ -1,0 +1,12 @@
+﻿
+
+<!--Note: Componet that will create a dynamic drop down menu-->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle role="button" data-bs-toggle="dropdown">Spa Packages</a>
+    <ul class="dropdown-menu">
+        @foreach(var spaPackage in Model)
+        {
+            <li> <a asp-controller="Spa" asp-action="Details" asp-route-id="@spaPackage.Id" class="text-decoration-none text-reset">@spaPackage.Package</a> </li>
+        }
+    </ul>
+</li>

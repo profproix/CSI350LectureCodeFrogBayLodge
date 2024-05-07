@@ -25,9 +25,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
                         </li>
+                        <li class="nav-item">
+                            <!--Note: Loads Custom Component-->
+                            @await Component.InvokeAsync("SpaMenu")
+                        </li>
                     </ul>
                     <!--Note: Add Loging Partial me-auto will move this element to the end of our navbar-->
                     <partial name="_LoginPartial" class="me-auto" />
+                    <partial name="_TimePartial" class="me-auto" />
                 </div>
             </div>
         </nav>
@@ -39,6 +44,10 @@
     </div>
 
     <footer class="border-top footer text-muted bg-info">
+        <!--Note: Custom  Tag Helper-->
+        <div class="container">
+            Phone: <custom-contact phone-number="000-111-2222"></custom-contact>
+        </div>
         <div class="container">
             &copy; 2024 - FrogBayLodge - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

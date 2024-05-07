@@ -28,5 +28,12 @@ namespace FrogBayLodge.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        //Note Quary Strings 
+        public IActionResult Test(string? search)
+        {
+            return new ContentResult { Content = search };
+        // https://localhost:7150/home/test?search=cat
+        }
     }
 }

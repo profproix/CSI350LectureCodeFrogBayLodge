@@ -9,7 +9,8 @@ namespace FrogBayLodge.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Beds { get; set; }
+        public int Beds { get; set; }
+        public string BedType { get; set; }
         [Required]
         public int MaximumOccupancy { get; set; }
         public bool? Kitchenette { get; set; }

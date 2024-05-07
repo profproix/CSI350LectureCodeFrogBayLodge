@@ -4,6 +4,7 @@ using FrogBayLodge.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FrogBayLodge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428192848_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,60 +119,6 @@ namespace FrogBayLodge.Migrations
                             MaximumOccupancy = 2,
                             Name = "Frog 103",
                             View = false
-                        });
-                });
-
-            modelBuilder.Entity("FrogBayLodge.Models.Spa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Package")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Spa");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Experience the ultimate relaxation with a Swedish massage, known for its gentle yet effective techniques that soothe muscles and promote circulation. Enjoy a blissful escape from stress and tension as skilled hands knead away knots, leaving you feeling rejuvenated and refreshed.",
-                            Package = "Swedish Massage",
-                            Price = 150.0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Dive deep into muscle tension and knots with a deep tissue massage, designed to target chronic pain and tightness.Through firm pressure and slow strokes, this treatment reaches the deeper layers of muscles, releasing tension and restoring mobility for a renewed sense of well - being.",
-                            Package = "Deep Tissue Massage",
-                            Price = 180.0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = " Reveal your skin's natural radiance with the Diamond Glow facial, a luxurious treatment that exfoliates, extracts, and infuses the skin with nourishing serums. Using diamond-tipped technology, this non-invasive procedure gently buffs away dead skin cells, leaving your complexion smoother, brighter, and more youthful-looking.",
-                            Package = "Diamond Glow Facial",
-                            Price = 130.0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Renew your skin with the transformative Frog Peel facial, featuring a potent blend of exfoliating acids to rejuvenate and clarify the complexion. This advanced peel helps to diminish fine lines, acne scars, and hyperpigmentation, revealing smoother, more even-toned skin with a healthy glow.",
-                            Package = "Frog Peel Facial",
-                            Price = 140.0
                         });
                 });
 
